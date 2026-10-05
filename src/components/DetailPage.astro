@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from './Hero.astro';
+import Callout from './Callout.astro';
+import { u } from '../lib/utils';
+import { faqSchema } from '../lib/seo';
+const { path, title, description, h1, intro, lead = [], sections = [], faqs = [], sources = [], related = [], parent, name, location, service = false, legal = false } = Astro.props;
+const crumbs = [...(parent ? [{ name: parent.name, path: parent.path }] : []), { name, path }];
+const heroCrumbs = crumbs.map((c) => ({ href: c.path, label: c.name }));
+---
+<Base title={title} description={description} path={path} crumbs={crumbs} service={service} extraSchema={faqs.length ? [faqSchema(faqs)] : []}>
+  <Hero headline={h1} intro={intro} location={location ?? name} crumbs={heroCrumbs} />
+  <section class="content-section"><div class="content-inner prose">
+    {path.includes("/guides/") && <table class="comparison"><caption>What each step can establish</caption><thead><tr><th>Step</th><th>Purpose</th><th>Limit</th></tr></thead><tbody><tr><td>Inspection</td><td>Locate visible obstruction and pipe defects</td><td>Does not itself clear the drain</td></tr><tr><td>Water jetting</td><td>Direct water at debris in a suitable line</td><td>Does not rebuild damaged pipe</td></tr><tr><td>Mechanical cleaning</td><td>Use a rotating tool to break an obstruction</td><td>Choice depends on the actual line</td></tr></tbody></table>}
+    {lead.map((p) => <p class="lead" set:html={p} />)}
+    {sections.map((s) => (<>
+      <h2 class="section-title" style="font-size:clamp(26px,3vw,38px)">{s.h}</h2>
+      {s.ps.map((p) => <p set:html={p} />)}
+    </>))}
+    {related.length > 0 && (
+      <div style="margin-top:32px;display:flex;gap:26px;flex-wrap:wrap">
+        {related.map((r) => <a class="text-link" href={u(r.href)}>{r.label}<span aria-hidden="true">&#8599;</span></a>)}
+      </div>
+    )}
+  </div></section>
+  {faqs.length > 0 && (
+    <section class="content-section" style="background:#eeece2"><div class="content-inner prose">
+      <h2 class="section-title" style="font-size:clamp(26px,3vw,38px)">Questions about this drain problem</h2>
+      <div class="content-list">{faqs.map((f) => <article class="faq-row"><h3>{f.q}</h3><p>{f.a}</p></article>)}</div>
+
+    </div></section>
+  )}
+  {!legal && <Callout />}
+</Base>

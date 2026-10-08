@@ -18,7 +18,6 @@ const relevantImage = pageImage(headline);
       <h1>{headline}</h1>
       <p class="hero-copy">{intro}</p><div class="hero-cta"><a href={business.phoneHref}>{business.phoneDisplay}</a><a href="#request-service">Request a call</a></div>
       {!['Privacy','Terms'].includes(location) && <img src={u(relevantImage.src)} alt={relevantImage.alt} width="1200" height="896" loading="eager" decoding="async" fetchpriority="high" style="display:block;width:100%;max-width:520px;height:clamp(190px,22vw,280px);object-fit:cover;border-radius:4px;margin:24px 0 0" />}
-      <p class="image-note">Illustrative image, not a photo of a local job.</p>
     </div>
     <RequestForm location={location} />
   </div>
